@@ -129,6 +129,14 @@ Open the local URL displayed in the terminal to access the application.
 
 This project was developed as a learning and portfolio project to practice ASP.NET Core MVC, database integration, authentication, authorization, and CRUD application development.
 
+## Screenshots
+
+### Dashboard
+![Dashboard](docs/screenshots/01.%20Dashboard.png)
+
+### Employee Management
+![Employee Management](docs/screenshots/02.%20Employee%20Management.png)
+
 ## Author
 
 **Nam Truong**
