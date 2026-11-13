@@ -131,11 +131,23 @@ This project was developed as a learning and portfolio project to practice ASP.N
 
 ## Screenshots
 
-### Dashboard
+### 1. Dashboard
 ![Dashboard](docs/screenshots/01.%20Dashboard.png)
 
-### Employee Management
+### 2. Employee Management
 ![Employee Management](docs/screenshots/02.%20Employee%20Management.png)
+
+### 3. Employee Form
+![Employee Form](docs/screenshots/03.%20Employee%20Form.png)
+
+### 4. Department Management
+![Department Management](docs/screenshots/04.%20Department%20Management.png)
+
+### 5. Position Management
+![Position Management](docs/screenshots/05.%20Position%20Management.png)
+
+### 6. User Management
+![User Management](docs/screenshots/06.%20User%20Management.png)
 
 ## Author
 
