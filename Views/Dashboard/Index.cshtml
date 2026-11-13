@@ -1,0 +1,177 @@
+﻿@model EmployeeManagement.Web.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2>Dashboard</h2>
+        <p class="text-muted mb-0">
+            Overview of your employee management system.
+        </p>
+    </div>
+
+    <span class="text-muted">
+        @DateTime.Now.ToString("dd/MM/yyyy")
+    </span>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <p class="text-muted mb-2">Total Employees</p>
+                <h2 class="fw-bold">@Model.TotalEmployees</h2>
+                <a asp-controller="Employees"
+                   asp-action="Index"
+                   class="small text-decoration-none">
+                    View employees
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <p class="text-muted mb-2">Active Employees</p>
+                <h2 class="fw-bold text-success">@Model.ActiveEmployees</h2>
+                <span class="small text-muted">Currently active</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <p class="text-muted mb-2">Inactive Employees</p>
+                <h2 class="fw-bold text-secondary">@Model.InactiveEmployees</h2>
+                <span class="small text-muted">Currently inactive</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <p class="text-muted mb-2">Departments</p>
+                <h2 class="fw-bold text-primary">@Model.TotalDepartments</h2>
+                <a asp-controller="Departments"
+                   asp-action="Index"
+                   class="small text-decoration-none">
+                    View departments
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row g-4">
+
+    <!-- Employees by Department -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    Active Employees by Department
+                </h5>
+
+                @if (!Model.EmployeesByDepartment.Any())
+                {
+                    <p class="text-muted">
+                        No employee statistics available.
+                    </p>
+                }
+                else
+                {
+                    var maxCount = Model.EmployeesByDepartment.Max(x => x.EmployeeCount);
+
+                    @foreach (var item in Model.EmployeesByDepartment)
+                    {
+                        var percentage = maxCount == 0
+                            ? 0
+                            : item.EmployeeCount * 100.0 / maxCount;
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>@item.DepartmentName</span>
+                                <strong>@item.EmployeeCount</strong>
+                            </div>
+
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar"
+                                     role="progressbar"
+                                     style="width: @percentage.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%"
+                                     aria-valuenow="@item.EmployeeCount"
+                                     aria-valuemin="0"
+                                     aria-valuemax="@maxCount">
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Employees -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    Recently Added Employees
+                </h5>
+
+                @if (!Model.RecentEmployees.Any())
+                {
+                    <p class="text-muted">
+                        No employees found.
+                    </p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Hire Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var employee in Model.RecentEmployees)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fw-semibold">
+                                                @employee.FullName
+                                            </div>
+                                            <small class="text-muted">
+                                                @employee.EmployeeCode
+                                            </small>
+                                        </td>
+
+                                        <td>
+                                            @(employee.Department?.Name ?? "Unavailable")
+                                        </td>
+
+                                        <td>
+                                            @employee.HireDate.ToString("dd/MM/yyyy")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>

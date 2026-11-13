@@ -1,0 +1,141 @@
+﻿@model IEnumerable<EmployeeManagement.Web.Models.Position>
+
+@{
+    ViewData["Title"] = "Positions";
+}
+
+<h2>Position Management</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="mb-3 d-flex gap-2">
+    <a asp-action="Create" class="btn btn-primary">Add Position</a>
+    <a asp-action="Trash" class="btn btn-outline-secondary">Trash</a>
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-5">
+        <input name="searchString"
+               value="@ViewBag.SearchString"
+               class="form-control"
+               placeholder="Search position name..." />
+    </div>
+
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+            <option value="">All Status</option>
+            <option value="Active"
+                    selected="@(ViewBag.Status?.ToString() == "Active" ? "selected" : null)">
+                Active
+            </option>
+            <option value="Inactive"
+                    selected="@(ViewBag.Status?.ToString() == "Inactive" ? "selected" : null)">
+                Inactive
+            </option>
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-success">Search</button>
+        <a asp-action="Index" class="btn btn-secondary">Reset</a>
+    </div>
+</form>
+
+<p>Total positions: @ViewBag.TotalItems</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No positions found.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var position in Model)
+                {
+                    <tr>
+                        <td>@position.Name</td>
+                        <td>@position.Description</td>
+                        <td>
+                            @if (position.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Inactive</span>
+                            }
+                        </td>
+                        <td>@position.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a asp-action="Details"
+                               asp-route-id="@position.Id"
+                               class="btn btn-sm btn-info">Details</a>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@position.Id"
+                               class="btn btn-sm btn-warning">Edit</a>
+
+                            <form asp-action="Delete"
+                                  asp-route-id="@position.Id"
+                                  method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Move this position to Trash?')">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@if ((int)ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == (int)ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-searchString="@ViewBag.SearchString"
+                       asp-route-status="@ViewBag.Status">
+                        @i
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+<a asp-controller="Dashboard"
+   asp-action="Index"
+   class="btn btn-outline-secondary">
+    Back to Dashboard
+</a>

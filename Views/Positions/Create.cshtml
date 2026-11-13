@@ -1,0 +1,23 @@
+﻿@model EmployeeManagement.Web.Models.Position
+
+@{
+    ViewData["Title"] = "Create Position";
+}
+
+<h2>Create Position</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <partial name="_PositionForm" model="Model" />
+
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

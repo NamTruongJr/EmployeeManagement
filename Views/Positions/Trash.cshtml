@@ -1,0 +1,59 @@
+﻿@model IEnumerable<EmployeeManagement.Web.Models.Position>
+
+@{
+    ViewData["Title"] = "Deleted Positions";
+}
+
+<h2>Deleted Positions</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<table class="table table-bordered align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Deleted At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center">Trash is empty.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var position in Model)
+            {
+                <tr>
+                    <td>@position.Name</td>
+                    <td>@position.Description</td>
+                    <td>@position.DeletedAt?.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <form asp-action="Restore"
+                              asp-route-id="@position.Id"
+                              method="post">
+                            <button type="submit" class="btn btn-sm btn-success">
+                                Restore
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Back</a>
